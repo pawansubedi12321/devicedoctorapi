@@ -82,6 +82,7 @@ class createBooking(models.Model):
     
 class Showproblem(models.Model):
     user = models.ForeignKey(Register, on_delete=models.CASCADE,null=True)
+
     booked_problem = models.ForeignKey(Problem, on_delete=models.CASCADE,null=True)
     
     class Meta:

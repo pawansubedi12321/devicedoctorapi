@@ -135,6 +135,7 @@ class ProblemView(APIView):
 class CreateBooking(APIView):
     def post(self, request):
         # Parse request data
+        #hello this is create booking 
         selected_brand = request.data.get("selected_brand")
         booked_problem = request.data.get("booked_problem")
         booked_date = request.data.get("booked_date")
