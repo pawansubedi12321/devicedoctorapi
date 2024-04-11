@@ -10,6 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status as http_status
 class RegisterView(APIView):
     def post(self, request):
+        # hello world
         
         username=request.data.get("username")
         phone_number=request.data.get("phone_number")
