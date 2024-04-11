@@ -27,7 +27,7 @@ class CreateBookingSerializer(serializers.ModelSerializer):
    
     class Meta:
         model=createBooking
-        fields=('id','booked_problem','selected_brand','booked_date','item_count','time_period','location','problem_interval','description','status','user','image')
+        fields=('id','phone_number','booked_problem','selected_brand','booked_date','item_count','time_period','location','problem_interval','description','status','user','image')
         
     Status_CHOICES=[
         ('appoint','appoint'),

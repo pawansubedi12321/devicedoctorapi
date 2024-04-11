@@ -120,6 +120,7 @@ class createBooking(models.Model):
     ]
     # booked_problem = models.CharField(max_length=36)  # Assuming it's a UUID
     selected_brand = models.CharField(max_length=255)
+    phone_number=models.TextField(max_length=12,default="0")
     booked_date = models.DateTimeField()
     item_count = models.PositiveIntegerField()
     time_period = models.CharField(max_length=20)

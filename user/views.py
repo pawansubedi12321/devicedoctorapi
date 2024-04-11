@@ -154,6 +154,7 @@ class ProblemView(APIView):
     
     def get(self,request,pk):
           categories=Problem.objects.filter(category=pk)
+        #   print(categories.name)
         #   problems=Problem.objects.filter(id=categories)
           serializer=AddProblemSerializer(categories,many=True)
           return Response(serializer.data, status=status.HTTP_200_OK)
@@ -205,6 +206,7 @@ class CreateBooking(APIView):
         location = request.data.get("location")
         user = request.data.get("user")
         problem_interval = request.data.get("problem_interval")
+        phone_number = request.data.get("phone_number")
         description = request.data.get("description")
         image=request.data.get('image')
         data = {
@@ -218,6 +220,7 @@ class CreateBooking(APIView):
             'booked_problem':booked_problem,
             'user':user,
             'image':image,
+            'phone_number':phone_number,
           
         }
         serializer = CreateBookingSerializer(data=data)
