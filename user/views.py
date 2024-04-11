@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from .serializers import UserSerializer,AddCategorySerializer,AddProblemSerializer,CreateBookingSerializer,ShowProblemserializer
 from rest_framework.response import Response
-from .models  import Register,AddCategory,Problem,createBooking,Showproblem
+from .models  import User,AddCategory,Problem,createBooking,Showproblem
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -23,6 +23,8 @@ class RegisterView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
 
 
 
@@ -34,12 +36,12 @@ class LoginView(APIView):
             username = request.data.get("username")
             phone_number = request.data.get("phone_number")
             # Check if a user with the provided username and phone number exists
-            stu_exists = Register.objects.filter(username=username, phone_number=phone_number).exists()
+            stu_exists = User.objects.filter(username=username, phone_number=phone_number).exists()
             if stu_exists:
                 # Set session variable to mark user as logged in
                 request.session['student_user'] = username
                 # Get the user details
-                student = Register.objects.get(username=username)
+                student = User.objects.get(username=username)
                 data = {
                     "id": student.id,
                     "username": student.username,
@@ -94,10 +96,9 @@ class AddCategoryView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def get(self,request,pk=None):
-     
         # register=Register.objects.get(pk=pk) 
         if pk is not None:
-            register = get_object_or_404(Register, pk=pk)
+            register = get_object_or_404(User, pk=pk)
             categories=AddCategory.objects.filter(user=register.id)
             serializer=AddCategorySerializer(categories,many=True)
             if categories:
@@ -106,6 +107,32 @@ class AddCategoryView(APIView):
                 return Response({"message": "Category not found"}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({"message": "Invalid  get request"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request, pk):
+        #
+        category = get_object_or_404(AddCategory, pk=pk)
+        print(category)
+        # user=request.data.get("user")
+        
+        name=request.data.get("name")
+        image=request.data.get("image")
+        category.name=name
+        category.image=image
+        # category.user=user
+        category.save()
+        serializer =AddCategorySerializer(category)
+  
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def delete(self, request, pk):
+        # Retrieve the category object by pk or raise a 404 error if it doesn't exist
+        category = get_object_or_404(AddCategory, pk=pk)
+        
+        # Delete the category object
+        category.delete()
+        
+        # Return a success response
+        return Response({"message": "Category deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
  
           
             
@@ -129,6 +156,38 @@ class ProblemView(APIView):
         #   problems=Problem.objects.filter(id=categories)
           serializer=AddProblemSerializer(categories,many=True)
           return Response(serializer.data, status=status.HTTP_200_OK)
+      
+    def put(self, request, pk):
+        #
+        problem = get_object_or_404(Problem, pk=pk)
+        
+        name=request.data.get("name")
+        price=request.data.get("price")
+        est_time=request.data.get("est_time")
+        short_description=request.data.get("short_description")
+        image=request.data.get("image")
+        problem.name=name
+        problem.price=price
+        problem.est_time=est_time
+        problem.short_description=short_description
+        problem.image=image
+        problem.save()
+        # category.image=image
+        # # category.user=user
+        # category.save()
+        serializer =AddProblemSerializer(problem)
+  
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def delete(self, request, pk):
+        # Retrieve the category object by pk or raise a 404 error if it doesn't exist
+        category = get_object_or_404(Problem, pk=pk)
+        
+        # Delete the category object
+        category.delete()
+        
+        # Return a success response
+        return Response({"message": "Category deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
           
 
        
@@ -187,7 +246,3 @@ class showproblemview(APIView):
                 print("this is problemlist",problemlist)
                 serializer=AddProblemSerializer(problemlist,many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
-        #     except:
-        #         return Response({'error':'something went wrong'},status=http_status.HTTP_404_NOT_FOUND)
-        # # else:
-        #     return Response({'error':'problemlist not found'},status=http_status.HTTP_404_NOT_FOUND)

@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import Register,Login,AddCategory,Problem,createBooking,Showproblem
+from .models import User,Login,AddCategory,Problem,createBooking,Showproblem
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Register
+        model=User
         fields =['id','username','phone_number','gender','district','profile_image']
         
 # class UserLoginSerializer(serializers.Serializer):
