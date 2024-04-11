@@ -140,11 +140,11 @@ class ProblemView(APIView):
     def post(self,request):
         category=request.data.get("category")
         name=request.data.get("name")
-        price=request.data.get("price")
+        # price=request.data.get("price")
         est_time=request.data.get("est_time")
         short_description=request.data.get("short_description")
         image=request.data.get("image")
-        data={'name':name,'price':price,'est_time':est_time,'short_description':short_description,'image':image,'category':category}
+        data={'name':name,'est_time':est_time,'short_description':short_description,'image':image,'category':category}
         serializer=AddProblemSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

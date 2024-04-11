@@ -91,7 +91,7 @@ class AddCategory(models.Model):
     
 class Problem(models.Model):
     name = models.CharField(max_length=255)
-    price = models.TextField()
+    # price = models.TextField()
     est_time = models.CharField(max_length=50)
     short_description = models.TextField()
     image = models.ImageField(upload_to='problem_images/', null=True, blank=True)
