@@ -4,7 +4,7 @@ from .models import User,Login,AddCategory,Problem,createBooking,Showproblem
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
-        fields =['id','username','phone_number','gender','district','profile_image']
+        fields =['id','username','phone_number','gender','district','profile_image','is_customer','is_admin']
         
 # class UserLoginSerializer(serializers.Serializer):
 #     username=serializers.CharField(max_length=255)

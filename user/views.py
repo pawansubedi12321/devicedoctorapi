@@ -6,9 +6,13 @@ from .models  import User,AddCategory,Problem,createBooking,Showproblem
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 # Create your views here.
+from user.decorators import admin_only
 from rest_framework import status as http_status
 class RegisterView(APIView):
+    
     def post(self, request):
         # hello world
         
@@ -17,8 +21,19 @@ class RegisterView(APIView):
         gender=request.data.get("gender")
         district=request.data.get("district")
         profile_image=request.data.get("profile_image")
-        data={'username':username,'phone_number':phone_number,'gender':gender,'district':district,'profile_image':profile_image}
-       
+        # password1 = request.data.get("password1")  # Get password
+        # password2 = request.data.get("password2")  # Get password confirmation
+
+        # # Check if passwords match
+        # if password1 != password2:
+        #     return Response({"error": "Passwords do not match"}, status=status.HTTP_400_BAD_REQUEST)
+
+        
+
+        
+        
+        data={'username':username ,'phone_number':phone_number,'gender':gender,'district':district,'profile_image':profile_image}
+        # data.set_password(password1)
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -27,10 +42,7 @@ class RegisterView(APIView):
     
     
 
-
-
 class LoginView(APIView):
-    
     def post(self, request):
         # Check if user is not already logged in
         if 'student_user' not in request.session:  
@@ -59,7 +71,18 @@ class LoginView(APIView):
             else:
                 return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response({"message": "User is already logged in"}, status=status.HTTP_400_BAD_REQUEST)
+             username = request.session['student_user']
+             student = User.objects.get(username=username)
+             data = {
+                "id": student.id,
+                "username": student.username,
+                "phone_number": student.phone_number,
+                "gender": student.gender,
+                "district": student.district,
+                "profile_image": student.profile_image.url if student.profile_image else None,
+            }
+             tokens = self.get_tokens_for_user(student)
+             return Response({"message": "User is already logged in", "data": data, "tokens": tokens}, status=status.HTTP_200_OK)
     
     def get_tokens_for_user(self, user):
         refresh = RefreshToken.for_user(user)
@@ -67,6 +90,7 @@ class LoginView(APIView):
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         }
+
 class LogoutView(APIView):
     def post(self, request):
         # Delete session variables
@@ -82,6 +106,9 @@ class LogoutView(APIView):
         return Response({"message": response_message}, status=status.HTTP_200_OK)
     
 class AddCategoryView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    @admin_only
     def post(self,request):
         register_id=request.data.get("user")
         # register = get_object_or_404(AddCategory, pk=pk)
@@ -97,7 +124,7 @@ class AddCategoryView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def get(self,request,pk=None):
-        # register=Register.objects.get(pk=pk) 
+  
         if pk is not None:
             register = get_object_or_404(User, pk=pk)
             categories=AddCategory.objects.filter(user=register.id)
@@ -138,6 +165,8 @@ class AddCategoryView(APIView):
           
             
 class ProblemView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     def post(self,request):
         category=request.data.get("category")
         name=request.data.get("name")
@@ -195,6 +224,8 @@ class ProblemView(APIView):
 
        
 class CreateBooking(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         # Parse request data
         #hello this is create booking 
@@ -244,6 +275,8 @@ class CreateBooking(APIView):
             return Response({'error': 'Please provide a valid pk'}, status=http_status.HTTP_400_BAD_REQUEST)
         
 class showproblemview(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     def get(self,request):
         # if pk is not None:
             # try:
