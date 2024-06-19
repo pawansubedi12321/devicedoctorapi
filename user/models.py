@@ -25,7 +25,7 @@ class Login(models.Model):
     
     
 class AddCategory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='category_images/', null=True, blank=True)
 
@@ -35,7 +35,7 @@ class AddCategory(models.Model):
     
 class Problem(models.Model):
     name = models.CharField(max_length=255)
-    # price = models.TextField()
+    price = models.TextField(null=True)
     est_time = models.CharField(max_length=50)
     short_description = models.TextField()
     image = models.ImageField(upload_to='problem_images/', null=True, blank=True)
@@ -66,13 +66,13 @@ class createBooking(models.Model):
     selected_brand = models.CharField(max_length=255)
     phone_number=models.TextField(max_length=12,default="0")
     booked_date = models.DateTimeField()
-    item_count = models.PositiveIntegerField()
+    # item_count = models.PositiveIntegerField()
     time_period = models.CharField(max_length=20)
     location = models.CharField(max_length=255)
     problem_interval = models.CharField(max_length=20)
     description = models.TextField()
     status = models.CharField(max_length=20,choices=Status_CHOICES,default="appoint")
-    image = models.ImageField(upload_to='problem_images/', null=True, blank=True)
+    # image = models.ImageField(upload_to='problem_images/', null=True, blank=True)
     # Foreign key to the Problem model
     booked_problem = models.ForeignKey(Problem, on_delete=models.CASCADE,null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)

@@ -14,20 +14,20 @@ class UserSerializer(serializers.ModelSerializer):
 class AddCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model=AddCategory
-        fields=['id','user','name','image']
+        fields=['id','name','image']
 
 
 class AddProblemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=Problem
-        fields=('id','name','est_time','short_description','image','category')
+        fields=('id','name','est_time','price','short_description','image','category')
         
 class CreateBookingSerializer(serializers.ModelSerializer):
    
     class Meta:
         model=createBooking
-        fields=('id','phone_number','booked_problem','selected_brand','booked_date','item_count','time_period','location','problem_interval','description','status','user','image')
+        fields=('id','phone_number','booked_problem','selected_brand','booked_date','time_period','user','location','problem_interval','description','status')
         
     Status_CHOICES=[
         ('appoint','appoint'),

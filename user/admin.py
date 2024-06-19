@@ -29,7 +29,7 @@ admin.site.register(User, CustomUserAdmin)
 from django.contrib.auth.models import Permission
 admin.site.register(Permission)
 admin.site.register(AddCategory)
-admin.site.register(Problem)
+admin.site.register(Problem,createprobleminline)
 admin.site.register(Question)
 admin.site.register(Answer)
 
