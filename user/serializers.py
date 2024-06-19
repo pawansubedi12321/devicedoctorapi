@@ -21,7 +21,7 @@ class AddProblemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=Problem
-        fields=('id','name','est_time','price','short_description','image','category')
+        fields=('id','name','price','short_description','image','category')
         
 class CreateBookingSerializer(serializers.ModelSerializer):
    
