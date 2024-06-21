@@ -53,11 +53,9 @@ class LoginView(APIView):
     # permission_classes = [IsAuthenticated]
     permission_classes = [AllowAny]
     def post(self, request):
-        # Check if user is not already logged in
-        # if 'student_user' not in request.session:  
+          
         username = request.data.get("username")
         phone_number = request.data.get("phone_number")
-        # Check if a user with the provided username and phone number exists
         stu_exists = User.objects.filter(username=username, phone_number=phone_number).exists()
         if stu_exists:
             # Set session variable to mark user as logged in
@@ -74,9 +72,13 @@ class LoginView(APIView):
             }
             # Generate JWT tokens for the user
             tokens = self.get_tokens_for_user(student)
+            # message={
+
+            # }
             response_message = f"Welcome, {username}"
+            
             print("this is student", data)
-            return Response({"message": response_message, "data": data, "tokens": tokens}, status=status.HTTP_200_OK)
+            return Response({"message":'user logged in successful', "data": data, "tokens": tokens}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         # else:
